@@ -1,0 +1,69 @@
+﻿<Window x:Class="DriodResClean.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:local="clr-namespace:DriodResClean.Helpers"
+		Title="MainWindow" Height="480" Width="640">
+	<Window.Resources>
+		<local:BoolToStringConverter x:Key="boolToStrConverter"/>
+		<local:BoolToColorConverter x:Key="boolToColorConverter"/>
+	</Window.Resources>
+	<StackPanel VerticalAlignment="Top">
+		<Label Content="Android Project Path" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+		<StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10,0,0,0">
+			<TextBox HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="350" TextChanged="textBox_TextChanged" Text="{Binding ProjectPathText}"/>
+			<Button Content="Browse" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="75" Command="{Binding BrowseCommand}"/>
+			<Label Content="{Binding IsAndroidProject, Converter={StaticResource boolToStrConverter}}"
+				   Foreground="{Binding IsAndroidProject, Converter={StaticResource boolToColorConverter}}"
+				   HorizontalAlignment="Left"
+				   Margin="10,0,0,0"
+				   VerticalAlignment="Center"
+				   FontWeight="Bold"/>
+		</StackPanel>
+		<Button Content="Process Project" Padding="10,0,10,0"
+				Margin="10,10,10,0" Height="30"
+				HorizontalAlignment="Center" Command="{Binding ProcessCommand}"
+				FontWeight="Bold"/>
+		<DataGrid AutoGenerateColumns="False" x:Name="dataGrid" HorizontalAlignment="Left"
+				  VerticalAlignment="Top"
+				  Margin="10,10,0,0" HorizontalGridLinesBrush="#FF46000A"
+				  VerticalGridLinesBrush="#FF46000A"
+				  ItemsSource="{Binding DataItems}">
+			<DataGrid.Columns>
+				<DataGridCheckBoxColumn Width="30" CanUserResize="False" CanUserReorder="False" Binding="{Binding IsSelected}">
+					<DataGridCheckBoxColumn.Header>
+						<CheckBox IsChecked="{Binding HeaderSelectAll, Mode=TwoWay}"/>
+					</DataGridCheckBoxColumn.Header>
+				</DataGridCheckBoxColumn>
+				<DataGridTemplateColumn Width="18">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<Image Source="{Binding FileFullPath}"/>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTextColumn Header="Name"
+								Binding="{Binding FileName}"
+								CanUserResize="True"
+								CanUserReorder="True"
+								CanUserSort="True"
+								IsReadOnly="True"
+								MinWidth="100"/>
+				<DataGridTextColumn Header="Relative Path"
+								Binding="{Binding FileRelPath}"
+								CanUserResize="True"
+								CanUserReorder="True"
+								CanUserSort="True"
+								IsReadOnly="True"
+								MinWidth="100"/>
+				<DataGridTextColumn Header="Full Path"
+								Binding="{Binding FileFullPath}"
+								CanUserResize="True"
+								CanUserReorder="True"
+								CanUserSort="True"
+								IsReadOnly="True"
+								MinWidth="100"/>
+
+			</DataGrid.Columns>
+		</DataGrid>
+	</StackPanel>
+</Window>
