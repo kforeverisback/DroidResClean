@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using GalaSoft.MvvmLight;
+using DriodResClean.Helper;
 
 namespace DriodResClean.Model
 {
@@ -51,16 +52,36 @@ namespace DriodResClean.Model
 			}
 		}
 
-		private string _fileFullPath;
-		public string FileFullPath
+		private string _fileSize;
+		public string FileSize
 		{
 			get
 			{
-				return _fileFullPath;
+				return _fileSize;
 			}
 			set
 			{
-				_fileFullPath = value;
+				_fileSize = value;
+				RaisePropertyChanged("FileSize");
+			}
+		}
+
+		public long FileSizeByte
+		{
+			get;
+			private set;
+		}
+
+		private string _fileFullPath;
+		public Uri FileFullPath
+		{
+			get
+			{
+				return new Uri(_fileFullPath, UriKind.Absolute);
+			}
+			set
+			{
+				_fileFullPath = value.AbsolutePath;
 				RaisePropertyChanged("FileFullPath");
 				FileName = Path.GetFileName(_fileFullPath);
 				int indx = _fileFullPath.IndexOf("res");
@@ -69,7 +90,12 @@ namespace DriodResClean.Model
 					string path = _fileFullPath.Substring(indx);
 					FileRelPath = Path.GetDirectoryName(path);
 				}
+
+				FileSizeByte = new FileInfo(_fileFullPath).Length;
+				FileSize = Helpers.Functions.GetFileSizeString(FileSizeByte);
 			}
 		}
+
+		
 	}
 }

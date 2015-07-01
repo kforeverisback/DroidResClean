@@ -26,20 +26,22 @@ namespace DriodResClean
 			InitializeComponent();
 			this.DataContext = _mvm;
 
-			_mvm.DataItems.Add(new Model.MainModel() { FileFullPath = @"D:\SCMWorkspace2\SamsungCameraManager\res\drawable\manager_divider_ab.9.png" });
-			_mvm.DataItems.Add(new Model.MainModel() { FileFullPath = @"D:\SCMWorkspace2\SamsungCameraManager\res\drawable\list_divider_holo_dark.9.png" });
-			_mvm.DataItems.Add(new Model.MainModel() { FileFullPath = @"D:\SCMWorkspace2\SamsungCameraManager\res\drawable\mobilelink_link_icon.png" });
-			_mvm.DataItems.Add(new Model.MainModel() { FileFullPath = @"D:\SCMWorkspace2\SamsungCameraManager\res\drawable\rvf_link_icon.png" });	
+			//_mvm.ProjectPathText = @"E:\Dev\MyAndroidApp";
 		}
 		
-		private async void textBox_TextChanged(object sender, TextChangedEventArgs e)
+		private void textBox_TextChanged(object sender, TextChangedEventArgs e)
 		{
 			string path = (sender as TextBox).Text;
 
 			if (string.IsNullOrEmpty(path))
-				_mvm.IsAndroidProject = null;
+				_mvm.Status = ViewModel.StatusEnum.EmptyProjectPath;
 			else
-				_mvm.IsAndroidProject = File.Exists(path + "\\AndroidManifest.xml") && Directory.Exists(path + "\\src") && Directory.Exists(path + "\\res");
+			{
+				if(File.Exists(path + "\\AndroidManifest.xml") && Directory.Exists(path + "\\src") && Directory.Exists(path + "\\res"))
+					_mvm.Status = ViewModel.StatusEnum.ValidDroidProject;
+				else
+					_mvm.Status = ViewModel.StatusEnum.InvalidDroidProject;
+			}
 
 		}
 	}
